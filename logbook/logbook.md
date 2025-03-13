@@ -96,11 +96,15 @@ We then ran the program again, this time setting the number of bins to 10. Notic
 Finally, we revised the code such that the final distribution we see is a standard normal distribution (zero mean and unit variance). We know that the random number generator follows a **continuous uniform distribution** $U(0,1)$, meaning all values in that range are equally likely to be generated.
 
 We know that the mean $\mu$ of a continuous uniform distribution is: 
+
 $$\mu=\dfrac{\alpha + \beta}{2}$$
+
 where in our case, $\alpha = 0$ and $\beta = 1$ and thus $\mu = 0.5$.
 
 We also know that the variance of a continuous uniform distribution is:
+
 $$\sigma ^ 2=\dfrac{(\beta - \alpha)^2}{12}$$
+
 which means $\sigma=\dfrac{1}{\sqrt{12}}$.
 
 Finally, we know that if $X \sim N(\mu , \sigma ^2)$, then the standard normal distribution is given by $Z=\dfrac{X-\mu}{\sigma} \sim N(0,1)$.
@@ -128,6 +132,7 @@ We also ran a final test with 20,000 iterations and 50 bins, and we observed a d
 In this exercise, we built an AM Modulator. We know that the equation for modulating a single tone (single-frequency signal) is given by:
 
 $$ s(t)=[A_c + A_m \cos(2 \pi f_m t)]\cos(2 \pi f_c t) $$
+
 where $A_m$ and $A_c$ are the amplitudes, and $f_m$ and $f_c$ are the frequencies of the message and carrier waveforms respectively.
 
 First, we created a new VI called `AM.gvi` and using the **Wave Generator** module, we created two **Sine waveforms** corresponding to the message and carrier waveforms. We created controls for frequency, amplitude, sample rate and samples for each waveform.
@@ -137,15 +142,23 @@ We then assigned values to the terminals of the waveform generators. We set the 
 $t_0$ (which is the starting time of the waveform) was also set to epoch which refers to time 0 in a given reference system which is useful for synchronising waveforms across systems. In our case, epoch was 01/01/1904, 00:00.
 
 We then added the **FFT Power Spectrum and PSD** module to the diagram. This module analyses the frequency content of a signal using the FFT. The Power Spectrum computes the magnitude squared of the FFT, representing the power present at each frequency component:
+
 $$ P(f)=|X(f)|^2 $$
+
 Switching the module to **PSD**, the power spectrum is simply normalised by the frequency resolution $\Delta f$, i.e. the **frequency bin width**:
+
 $$ \text{PSD}(f)=\dfrac{|X(f)^2|}{\Delta f} $$
+
 Changing to PSD is useful as it gives a density which is useful when comparing power between different signals.
 
 Finally, we performed some multiplication, division and addition operations to obtain the AM waveform. From AM theory:
+
 $$ s(t)= [A_c + A_m \cos(2 \pi f_m t)]\cos(t \pi f_c t) $$
+
 which can be rewritten as:
+
 $$ s(t) = \frac{1}{A_c}[A_m\cos(2 \pi f_m t)][A_c\cos(2 \pi f_c t)]+ A_c\cos(2 \pi f_c t) $$
+
 and so we therefore had a **Multiply (Waveform)** module which multiplied the message and carrier waveforms, a **Divide (Waveform)** module to divide by $A_c to remove the extra scaling factor $A_c$ and finally we used an **Add (Waveform)** module to add the carrier component to the result. We then created an indicator to show the AM waveform and PSD. We also created a Sub-VI for the AM module.
 
 <img src="images/lab1/task3block.PNG">
