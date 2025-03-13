@@ -37,7 +37,9 @@ We then tested this by inputting both our surnames in the `String Constant` fiel
 <img src="images/lab1/task1Liu.PNG">
 
 Rearranging the above equation for $\degree \text{F}$, we get:
+
 $$ \degree \text{F} = (\degree \text{C} \times 1.8) + 32 $$
+
 And since our threshold is $50$, we set $\degree \text{C} = 50$ and so the minimum ASCII character code to exceed the threshold is $122$ which corresponds to the ASCII symbol `z`:
 
 <img src="images/lab1/task1zzz.PNG">
