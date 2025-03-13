@@ -79,7 +79,7 @@ The **number of bins** refers to the number of intervals into which the data ran
 
 This was our final block diagram:
 
-<img src="images/lab1/task2block.PNG">
+<img src="images/lab1/task2block.png">
 
 We then ran the program, setting wait time to $10$ ms and number of bins to $100$. We let the program run for roughly $5000$ simulations before stopping it and this was the resulting histogram:
 
