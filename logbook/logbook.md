@@ -177,9 +177,13 @@ We also see from the PSD of the AM signals that there are three main components 
 For $\mu=0.5$ (under-modulated), the sidebands are present but have low energy. This is because the carrier remains dominant meaning most of the power is in the carrier rather than the message (inefficient power usage).
 
 For $\mu=1$ (critical modulation), the sidebands have equal power. We know that the total transmitted poewr in AM is:
+
 $$ P_{total}=P_c+P_{USB}+P_{LSB} $$
+
 and at critical modulation, the power in the sidebands together equals 50% of the total power, i.e. the total sideband power is equal to the carrier power:
+
 $$ P_{USB}=P_{LSB}=\dfrac{P_c}{2} $$
+
 $$ P_{USB}+P_{LSB}=P_c=\dfrac{P_{total}}{2} $$
 
 For $\mu=1.5$ (over-modulated), the sidebands have more energy but nonlinear distortion occurs, introducing frequency components (harmonics). 
@@ -212,9 +216,13 @@ In binary phase-shift keying (BPSK), there are two phase values: $0 \degree$ or 
 ### Exercise 1 - BPSK Transmitter
 
 The BPSK signal is given by the equation:
+
 $$ A g_{TX}(t)\cos(2\pi f_c t + \theta (t)) $$
+
 where $A$ is a constant corresponding to the transmitted power level, $g_{TX}(t)$ is a fixed pulse shape, $f_c$ is the carrier frequency and $\theta(t)$ takes the value of either $0\degree$ or $180\degree$ to carry the desired information. Therefore, the equation can be rewritten as:
+
 $$ \pm A g_{TX}(t)\cos(2\pi f_c t)$$
+
 since $\cos(\theta + 180\degree)=-\cos(\theta)$.
 We assume a new pulse is transmitted every $T$ seconds so that the symbol rate is $1/T$.
 
@@ -226,13 +234,18 @@ To form a BPSK signal, we first need to map the input data (a stream of bits) to
 | 1         | 180              | 1      |
 
 In our case, this mapping follows the equation:
+
 $$ s[n] = 2 b[n] - 1 $$
+
 Also, the symbol rate and bit rate are the same in this case as each symbol represents exactly one bit (0 or 1) and since there are only two symbols (-1 and 1), these are the same.
 
 We then do the upstampling step. This increases the sample rate before pulse shaping by placing $L-1$ zeros after each symbol.
 This therefore produces a sample interval of:
+
 $$ T_x = \dfrac{T}{L} $$
+
 or a sample rate of 
+
 $$ \dfrac{1}{T_x}=L \dfrac{1}{T} $$
 
 The quantity $L$ is known as the **upsampling factor**.
@@ -244,11 +257,13 @@ We finally send the signal in the form $(\pm 1+0j)g_{TX}[n]$ directly to the USR
 First, we added the **MT Generate Bits** module which creates a pseudorandom sequence of bits fo tthe BPSK system. We added a control to specify the total number of bits.
 
 We then performed the symbol mapping, implementing this basic equation:
+
 $$ s[n] = 2 b[n] - 1 $$
 
  We then include the **AddFrameHeader** sub-VI after this. This module inserts a specific 26-bit sequence at the start of the transmission, which is used to align the recieved bits. This is needed because the receiver doesn't inherently know where the first bit of the message start. This 26-bit header is then found at the receiver and is cut off (along with any bits before the frame header) which were just noise or misaligned data.
 
 We then upsample the array of symbols using the **Upsample** module. We use the symbol rate $\frac{1}{T}=10,000$ (which is the symbols per second) and the IQ rate $\frac{1}{T_x}=200,000$ (which is the samples per second) to calculate the upsampling factor:
+
 $$L=\dfrac{\text{IQ Rate}}{\text{Symbol Rate}}=\dfrac{\frac{1}{T_x}}{\frac{1}{T}}=\dfrac{T}{T_x}=\dfrac{200,000}{10,000}=20$$
 
 This means each symbol is represented by 20 samples.
@@ -271,7 +286,9 @@ This was our completed block diagram:
 In the panel, we then assigned these values as shown:
 <img src="images/lab4/task1/values.PNG">
 
-Clearly, given the symbol rate $\frac{1}{T}=10,000$ and the IQ rate $\frac{1}{T_x}=200,000$, the number of samples per symbol, or the upsampling factor $$L=\dfrac{\text{IQ Rate}}{\text{Symbol Rate}}=\dfrac{200,000}{10,000}=20$$
+Clearly, given the symbol rate $\frac{1}{T}=10,000$ and the IQ rate $\frac{1}{T_x}=200,000$, the number of samples per symbol, or the upsampling factor 
+
+$$L=\dfrac{\text{IQ Rate}}{\text{Symbol Rate}}=\dfrac{200,000}{10,000}=20$$
 
 These were the plots we obtained.
 
@@ -312,19 +329,27 @@ The root-raised cosine is designed to minimise inter-symbol interference (ISI) a
 ### Exercise 2 - BPSK Receiver
 
 The BPSK signal that arrives at the receiver is given by:
+
 $$ r(t)=\pm Dg_{TX}(t) \cos(2\pi f_c t + \varphi) $$
+
 where $D$ is a constant (usually smaller than A, as the received signal will be attenuated) and $\varphi$ represents the difference in phase between the transmitter and receiver carrier oscillators. 
 
 Assuming the receiver's carrier oscillator is set to the same frequency as the transmitter, then the USRP receiver does the majority of the work in demodulating the BPSK signal. It is demodulated by multiplying it with the receiver's carrier oscillator signal $\cos(2 \pi f_c t)$:
+
 $$ r_{demod}(t)=r(t)\cdot \cos(2\pi f_c t)=Dg_{TX}(t) \cos(2\pi f_c t + \varphi)\cos(2\pi f_c t)$$
+
 $$ r_{demod}(t)=Dg_{TX}(t)\cdot \dfrac{1}{2}[\cos(4\pi f_c t + \varphi) + \cos(\varphi)]$$
+
 where we have used trigonometric identities to simplify.
 
 The term $\cos(4 \pi f_c t + \varphi)$ is a high-frequency component which would be filtered out by a LP filter, giving:
+
 $$ r_{baseband}(t)=\dfrac{D}{2}g_{TX}(t)\cos(\varphi)=\dfrac{D}{2}g_{TX}(t)e^{j\varphi}$$
+
 It is then sampled at intervals $T$ and the $\pm$ comes from the BPSK modulation: $+\frac{D}{2}$ for symbol "$1$" and $-\frac{D}{2}$ for "$-1$".
  
 Therefore the receiver's **Fetch Rx Data** function provides this sequence of output samples, given by:
+
 $$ \tilde{r}[n]=\pm \frac{D}{2}g_{TX}[n]e^{j\varphi} $$
 
 Similar to the transmitter, the sampling rate $\frac{1}{T_z}$ is set by the receiver's **IQ Rate** and this rate is set so as to provide $M$ samples every $T$ seconds, where $\frac{1}{T}$ is the sample rate.
@@ -338,6 +363,7 @@ The matched filte routput is an analog baseband signal that needs to be sampled 
 The **Decimate** module then samples the aligned baseband waveform at index 0 and every $T$ seconds thereafter. This is the process of **downsampling** the baseband signal to extract one sample per symbol period $T$. The input to the Decimate function is a high-rate signal (i.e. $M \times$ the symbol rate, where $M$ is the matched samples per symbol or the decimation rate). For example, if our input samples are $x[0], x[1], x[2], x[3], x[4], x[5], ...$ and we have a decimation factor $M=4$, out output samples will be $x[0], x[4], x[8], ...$.
 
 Finally, once we have sampled the baseband waveform, each sample must be examined to determine whether it represents the symbol $1$ or $-1$. These detected symbols are then converted to bits by carrying out the opposite of the calculation we did in the transmitter:
+
 $$ b[n] = \dfrac{s[n] + 1}{2}$$
 
 Alternatively, a **Greater than 0?** function also works.
