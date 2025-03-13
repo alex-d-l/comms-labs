@@ -26,21 +26,21 @@ Next we wanted to calculate the average of the array of converted temperatures. 
 
 Finally, we applied a threshold using the **Greater or Equal** module, setting the constant to $50$ and comparing the average value to this constant. We then added a boolean indicator `Hot?` as the output of the **Greater or Equal** module.
 
-<img src="images/lab1/task1block.png">
+<img src="images/lab1/task1block.PNG">
 
 In summary: we input a string, receieve an array of ASCII codes corresponding to each character of the string, we then consider these integers to be temperatures in Fahrenheit and convert these values to Celcius, find the average and then compare with $50$. If the average temperature in Celcius is greater than or equal to $50$, the boolean indicator `Hot?` is true (lights up blue in the panel).
 
 We then tested this by inputting both our surnames in the `String Constant` field:
 
-<img src="images/lab1/task1Lewis.png">
+<img src="images/lab1/task1Lewis.PNG">
 
-<img src="images/lab1/task1Liu.png">
+<img src="images/lab1/task1Liu.PNG">
 
-Rearranging the above equation for $ \degree \text{F} $, we get:
+Rearranging the above equation for $\degree \text{F}$, we get:
 $$ \degree \text{F} = (\degree \text{C} \times 1.8) + 32 $$
 And since our threshold is $50$, we set $\degree \text{C} = 50$ and so the minimum ASCII character code to exceed the threshold is $122$ which corresponds to the ASCII symbol `z`:
 
-<img src="images/lab1/task1zzz.png">
+<img src="images/lab1/task1zzz.PNG">
 
 And hence the indicator `Hot?` is True and lights up blue in the panel.
 
@@ -77,7 +77,7 @@ The **number of bins** refers to the number of intervals into which the data ran
 
 This was our final block diagram:
 
-<img src="images/lab1/task2block.png">
+<img src="images/lab1/task2block.PNG">
 
 We then ran the program, setting wait time to $10$ ms and number of bins to $100$. We let the program run for roughly $5000$ simulations before stopping it and this was the resulting histogram:
 
